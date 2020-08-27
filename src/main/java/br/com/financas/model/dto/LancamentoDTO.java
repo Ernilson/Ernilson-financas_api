@@ -12,15 +12,14 @@ public class LancamentoDTO {
 	private Integer ano;
 	private BigDecimal valor;
 	private Long usuario;
-        private Usuario usuarios;
-        private String usuario2;
 	private String tipo;
 	private String status;
 
 	public LancamentoDTO() {
 
-	}	
+	}
 
+	
 	public LancamentoDTO(Long id, String descricao, Integer mes, Integer ano, BigDecimal valor, Long usuario,
 			String tipo, String status) {
 		super();
@@ -33,6 +32,7 @@ public class LancamentoDTO {
 		this.tipo = tipo;
 		this.status = status;
 	}
+
 
 	public Long getId() {
 		return id;
@@ -98,13 +98,5 @@ public class LancamentoDTO {
 		this.status = status;
 	}
 
-    public Usuario getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Usuario usuarios) {
-        this.usuarios = usuarios;
-    }
-
-
+	
 }

@@ -64,10 +64,10 @@ public class UsuarioServiceImpl implements UsuarioServices {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-    public Optional<Usuario> findByOne(Long codigo) {
-        return usuarioRep.findById(codigo);
-    }
+     // Metodo para buscar usuario por id
+        public Usuario getOne(Long id) {
+            return usuarioRep.getOne(id);
+        }    
 	
 
 }

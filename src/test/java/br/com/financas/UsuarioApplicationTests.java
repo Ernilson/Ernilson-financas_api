@@ -15,7 +15,7 @@ import br.com.financas.servicesImpl.UsuarioServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FinancasApplicationTests {
+public class UsuarioApplicationTests {
 
     @Autowired
     private UsuarioRepository urp;
@@ -29,13 +29,13 @@ public class FinancasApplicationTests {
         //Cenario
 
         Usuario user = new Usuario();
-        user.setNome("validação2");
-        user.setEmail("teste2@teste.com");
-        user.setSenha("senha");
-        user.setData("22/08/2020");
-        //l.setUsuario(user);
+        user.setNome("foutro teste");
+        user.setEmail("foutro@teste.com");
+        user.setSenha("outo");
+        //user.setData("22/08/2020");
+//        l.setUsuario(user);
 
-        //usi.salvar(user);
+//        usi.salvar(user);
         //usi.ValidarEmail("teste@teste.com");
         //ação / execução
         //boolean result = urp.existsByEmail("teste@teste.com");

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.financas.Exeptions.RegraNegocioException;
 import br.com.financas.model.Lancamento;
 import br.com.financas.model.Enuns.StatusLancamento;
+import br.com.financas.model.Enuns.TipoLancamento;
 import br.com.financas.repositories.LancamentoRepository;
 import br.com.financas.services.LancamentoService;
 
@@ -27,7 +28,7 @@ public class LancamentoServicesImpl implements LancamentoService {
 	@Override
 	@Transactional
 	public Lancamento salvar(Lancamento lancamento) {
-		//validar(lancamento);
+
 		lancamento.setStatus(StatusLancamento.PENDENTE);
 		return lancamentoRep.save(lancamento);
 	}
@@ -36,7 +37,7 @@ public class LancamentoServicesImpl implements LancamentoService {
 	@Transactional
 	public Lancamento atualizar(Lancamento lancamento) {
 		Objects.requireNonNull(lancamento.getId());
-		//validar(lancamento);
+		validar(lancamento);
 		return lancamentoRep.save(lancamento);
 	}
 
@@ -94,5 +95,24 @@ public class LancamentoServicesImpl implements LancamentoService {
 	public Optional<Lancamento> obterPorId(Long id) {
 		return lancamentoRep.findById(id);
 	}
-       
+        
+         public Lancamento getOne(Long id) {
+            return lancamentoRep.getOne(id);
+         }
+
+		@Override
+		@Transactional(readOnly = true)
+		public BigDecimal obterSaldoPorUsuario(Long id) {
+		BigDecimal receitas = lancamentoRep.obterSaldoPorTipoLancamentoEUsuarioEStatus(id, TipoLancamento.RECEITA,StatusLancamento.EFETIVADO);
+		BigDecimal despesas = lancamentoRep.obterSaldoPorTipoLancamentoEUsuarioEStatus(id, TipoLancamento.DESPESA,StatusLancamento.EFETIVADO);
+		
+		if (receitas == null) {
+			receitas = BigDecimal.ZERO;
+		}
+		if (despesas == null) {
+			despesas = BigDecimal.ZERO;
+		}	
+		
+		return receitas.subtract(despesas);
+		}
 }

@@ -19,8 +19,10 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import br.com.financas.model.Enuns.StatusLancamento;
 import br.com.financas.model.Enuns.TipoLancamento;
+import lombok.Builder;
 
 @Entity
+@Builder
 @Table(name = "lancamento")
 public class Lancamento {
 	

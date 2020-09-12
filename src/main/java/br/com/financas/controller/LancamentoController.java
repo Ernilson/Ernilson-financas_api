@@ -57,7 +57,14 @@ public class LancamentoController {
 		List<Lancamento> lancamentos = service.buscar(lancamentoFiltro);
 		return ResponseEntity.ok(lancamentos);
 	}
-
+	
+	@GetMapping("{id}")
+	public ResponseEntity obterLancamento( @PathVariable("id") Long id ) {
+		return service.obterPorId(id)
+					.map( lancamento -> new ResponseEntity(converter2(lancamento), HttpStatus.OK) )
+					.orElseGet( () -> new ResponseEntity(HttpStatus.NOT_FOUND) );
+	}
+	
 	@PostMapping
 	public ResponseEntity salvarLancamento(@RequestBody LancamentoDTO dto) {
 		try {
@@ -77,7 +84,7 @@ public class LancamentoController {
 		
 		return service.obterPorId(id).map(entity -> {
 			try {
-				Lancamento lancamento = converter2(dto);
+				Lancamento lancamento = converter(dto);
 				lancamento.setId(entity.getId());
 				service.atualizar(lancamento);
 				return ResponseEntity.ok(lancamento);
@@ -144,34 +151,46 @@ public class LancamentoController {
 		
 		return l;
 	}
-        
-        private Lancamento converter2(LancamentoDTO dto) {
-		Lancamento l = new Lancamento();
-		l.setId(dto.getId());
-		l.setDescricao(dto.getDescricao());
-		l.setAno(dto.getAno());
-		l.setMes(dto.getMes());
-		l.setValor(dto.getValor());	
+	
+        private LancamentoDTO converter2(Lancamento dto2) {
+		LancamentoDTO dto = new LancamentoDTO();
+		dto2.setId(dto.getId());
+		dto2.setDescricao(dto.getDescricao());
+		dto2.setAno(dto.getAno());
+		dto2.setMes(dto.getMes());
+		dto2.setValor(dto.getValor());	
 
 		Usuario user = usuarioService.obterPorId(dto.getUsuario())
 				.orElseThrow(() -> new RegraNegocioException("Usuario não encontrado para o id informado!"));
 		
-		l.setUsuario(user);		
+		dto2.setUsuario(user);		
 		
 		if (dto.getTipo() != null) {
-			l.setTipo(TipoLancamento.valueOf(dto.getTipo()));
-		}
-                
-		//Metodo abaixo esta mostrando o seguinte erro!!!
-                //  No enum constant br.com.financas.model.Enuns.StatusLancamento.RECEITA
-                // "status": null
-                
-		//if (dto.getStatus() != null) {
-		//	l.setStatus(StatusLancamento.valueOf(dto.getStatus()));
-		//}
+			dto2.setTipo(TipoLancamento.valueOf(dto.getTipo()));
+		}                
 		
-		return l;
+		if (dto.getStatus() != null) {
+			dto2.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+		}
+		
+		return dto;
 	}
+        
+        /*
+    	private LancamentoDTO converter(Lancamento lancamento) {
+    		return LancamentoDTO.builder()
+    					.id(lancamento.getId())
+    					.descricao(lancamento.getDescricao())
+    					.valor(lancamento.getValor())
+    					.mes(lancamento.getMes())
+    					.ano(lancamento.getAno())
+    					.status(lancamento.getStatus().name())
+    					.tipo(lancamento.getTipo().name())
+    					.usuario(lancamento.getUsuario().getId())
+    					.build();
+    					
+    	}
+    	*/
         
        
         
